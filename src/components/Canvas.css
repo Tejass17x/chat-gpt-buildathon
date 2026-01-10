@@ -1,0 +1,152 @@
+.canvas-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #fafafa;
+  overflow: hidden;
+}
+
+.canvas-header {
+  padding: 1rem 1.5rem;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.canvas-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.grid-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #666;
+  cursor: pointer;
+  user-select: none;
+}
+
+.grid-toggle input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.element-count {
+  font-size: 0.85rem;
+  color: #666;
+  background: #f0f0f0;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+}
+
+.canvas {
+  flex: 1;
+  position: relative;
+  overflow: auto;
+  background-color: #ffffff;
+  padding: 2rem;
+  min-height: 100%;
+  cursor: default;
+  scroll-behavior: smooth;
+}
+
+.canvas.show-grid {
+  background-image: 
+    linear-gradient(to right, #e8e8e8 1px, transparent 1px),
+    linear-gradient(to bottom, #e8e8e8 1px, transparent 1px);
+  background-size: 10px 10px;
+  background-position: 0 0;
+}
+
+.canvas.drag-over {
+  background-color: rgba(102, 126, 234, 0.05);
+}
+
+.canvas.drag-over.show-grid {
+  background-image: 
+    linear-gradient(to right, #667eea 1px, transparent 1px),
+    linear-gradient(to bottom, #667eea 1px, transparent 1px),
+    linear-gradient(to right, #e8e8e8 1px, transparent 1px),
+    linear-gradient(to bottom, #e8e8e8 1px, transparent 1px);
+  background-size: 10px 10px, 10px 10px, 10px 10px, 10px 10px;
+  background-position: 0 0, 0 0, 0 0, 0 0;
+}
+
+.drop-indicator {
+  position: absolute;
+  width: 200px;
+  min-height: 60px;
+  border: 2px dashed #667eea;
+  border-radius: 6px;
+  background: rgba(102, 126, 234, 0.08);
+  pointer-events: none;
+  z-index: 999;
+  animation: pulse 1.2s ease-in-out infinite;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.15), 0 4px 12px rgba(102, 126, 234, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drop-indicator::before {
+  content: 'Drop here';
+  color: #667eea;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+    border-color: #667eea;
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.01);
+    border-color: #764ba2;
+  }
+}
+
+.canvas-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 400px;
+  color: #999;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.canvas-empty h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.canvas-empty p {
+  font-size: 1rem;
+  color: #999;
+}
+
+
+

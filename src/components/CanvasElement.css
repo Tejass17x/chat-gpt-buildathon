@@ -1,0 +1,133 @@
+.canvas-element {
+  position: relative;
+  display: inline-block;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.canvas-element:hover:not(.selected) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.canvas-element.selected {
+  box-shadow: 0 0 0 2px #667eea, 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.canvas-element.selected {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.canvas-element.hovered {
+  outline: 1px dashed #999;
+  outline-offset: 1px;
+}
+
+/* Image specific styles */
+.canvas-element img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  transition: transform 0.2s ease;
+}
+
+.canvas-element:hover img {
+  transform: scale(1.02);
+}
+
+.canvas-element.selected img {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.element-controls {
+  position: absolute;
+  top: -30px;
+  right: 0;
+  display: flex;
+  gap: 0.5rem;
+  background: white;
+  padding: 0.25rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+}
+
+.control-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.control-btn:hover {
+  background: #f0f0f0;
+}
+
+.delete-btn:hover {
+  background: #fee;
+}
+
+.element-overlay {
+  position: absolute;
+  top: -24px;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.element-type {
+  text-transform: capitalize;
+}
+
+.btn-primary {
+  background: #667eea;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #5568d3;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+}
+
+.btn-success {
+  background: #28a745;
+  color: white;
+  border: none;
+}
+
+.btn-success:hover {
+  background: #218838;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+  border: none;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+}
+
+
+
