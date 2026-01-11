@@ -1,29 +1,31 @@
 .sidebar {
-  width: 250px;
-  background: white;
-  border-right: 1px solid #e0e0e0;
+  width: 260px;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 1px 0 3px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-header {
-  padding: 1.5rem 1rem;
-  border-bottom: 1px solid #e0e0e0;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 1.5rem 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
 .sidebar-header h2 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 0.25rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.375rem;
+  letter-spacing: -0.025em;
 }
 
 .sidebar-subtitle {
-  font-size: 0.85rem;
-  color: #666;
+  font-size: 0.8125rem;
+  color: #64748b;
+  font-weight: 500;
 }
 
 .sidebar-content {
@@ -37,24 +39,27 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  background: #f8f9fa;
-  border: 2px dashed #ddd;
+  padding: 0.875rem 1rem;
+  background: #ffffff;
+  border: 1.5px solid #e5e7eb;
   border-radius: 8px;
   cursor: grab;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   user-select: none;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-element:hover {
-  background: #e9ecef;
-  border-color: #667eea;
-  transform: translateX(4px);
+  background: #f8fafc;
+  border-color: #3b82f6;
+  transform: translateX(2px);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-element.dragging {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: grabbing;
+  border-color: #3b82f6;
 }
 
 .element-icon {
@@ -63,8 +68,8 @@
 
 .element-label {
   font-weight: 500;
-  color: #333;
-  font-size: 0.95rem;
+  color: #1e293b;
+  font-size: 0.9375rem;
 }
 
 

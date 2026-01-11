@@ -72,6 +72,83 @@ const ELEMENT_TYPES = [
     icon: '📦',
     defaultProps: {},
     defaultStyle: { padding: '1rem', backgroundColor: '#f9f9f9', borderRadius: '8px', minHeight: '100px' }
+  },
+  {
+    type: 'link',
+    label: 'Link',
+    icon: '🔗',
+    defaultProps: { text: 'Click here', href: 'https://example.com', target: '_blank' },
+    defaultStyle: { color: '#3b82f6', textDecoration: 'underline', cursor: 'pointer' }
+  },
+  {
+    type: 'list',
+    label: 'List',
+    icon: '📋',
+    defaultProps: { items: 'Item 1\nItem 2\nItem 3', ordered: false },
+    defaultStyle: { padding: '1rem', listStylePosition: 'inside' }
+  },
+  {
+    type: 'select',
+    label: 'Select',
+    icon: '📋',
+    defaultProps: { options: 'Option 1\nOption 2\nOption 3', placeholder: 'Select an option' },
+    defaultStyle: { padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px', width: '100%' }
+  },
+  {
+    type: 'checkbox',
+    label: 'Checkbox',
+    icon: '☑️',
+    defaultProps: { label: 'Check me', checked: false },
+    defaultStyle: { width: '18px', height: '18px', cursor: 'pointer', marginRight: '0.5rem' }
+  },
+  {
+    type: 'radio',
+    label: 'Radio',
+    icon: '🔘',
+    defaultProps: { label: 'Select me', name: 'radio-group', checked: false },
+    defaultStyle: { width: '18px', height: '18px', cursor: 'pointer', marginRight: '0.5rem' }
+  },
+  {
+    type: 'label',
+    label: 'Label',
+    icon: '🏷️',
+    defaultProps: { text: 'Label text', for: '' },
+    defaultStyle: { fontSize: '0.875rem', fontWeight: '500', color: '#374151', display: 'block', marginBottom: '0.25rem' }
+  },
+  {
+    type: 'span',
+    label: 'Span',
+    icon: '📝',
+    defaultProps: { text: 'Inline text' },
+    defaultStyle: { display: 'inline', fontSize: '1rem' }
+  },
+  {
+    type: 'table',
+    label: 'Table',
+    icon: '📊',
+    defaultProps: { rows: 3, cols: 3, header: true },
+    defaultStyle: { borderCollapse: 'collapse', width: '100%', border: '1px solid #ddd' }
+  },
+  {
+    type: 'video',
+    label: 'Video',
+    icon: '🎥',
+    defaultProps: { src: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4', controls: true },
+    defaultStyle: { width: '100%', maxWidth: '600px', height: 'auto', borderRadius: '8px' }
+  },
+  {
+    type: 'iframe',
+    label: 'Iframe',
+    icon: '🖼️',
+    defaultProps: { src: 'https://www.example.com', width: '600', height: '400' },
+    defaultStyle: { border: 'none', borderRadius: '8px' }
+  },
+  {
+    type: 'form',
+    label: 'Form',
+    icon: '📝',
+    defaultProps: { action: '#', method: 'post' },
+    defaultStyle: { padding: '1.5rem', backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e7eb' }
   }
 ]
 

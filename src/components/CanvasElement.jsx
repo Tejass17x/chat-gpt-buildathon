@@ -3,8 +3,9 @@ import { useDrag } from 'react-dnd'
 import Resizer from './Resizer'
 import './CanvasElement.css'
 
-const CanvasElement = ({ element, isSelected, onSelect, onDelete, onUpdate }) => {
+const CanvasElement = ({ element, isSelected, onSelect, onDelete, onToggleLock, onUpdate }) => {
   const [isHovered, setIsHovered] = useState(false)
+  const isLocked = element.locked || false
 
   const [{ isDragging }, drag] = useDrag({
     type: 'canvas-element',
@@ -13,6 +14,7 @@ const CanvasElement = ({ element, isSelected, onSelect, onDelete, onUpdate }) =>
       type: 'move',
       currentPosition: element.position
     },
+    canDrag: () => !isLocked, // Disable dragging for locked elements
     collect: (monitor) => ({
       isDragging: monitor.isDragging()
     })
@@ -46,10 +48,11 @@ const CanvasElement = ({ element, isSelected, onSelect, onDelete, onUpdate }) =>
     const baseStyle = {
       ...elementStyle,
       position: 'relative',
-      cursor: isDragging ? 'grabbing' : 'grab',
+      cursor: isLocked ? 'not-allowed' : (isDragging ? 'grabbing' : 'grab'),
       userSelect: 'none',
       pointerEvents: 'auto',
-      display: 'block'
+      display: 'block',
+      opacity: isLocked ? 0.85 : 1
     }
 
     switch (element.type) {
@@ -165,15 +168,138 @@ const CanvasElement = ({ element, isSelected, onSelect, onDelete, onUpdate }) =>
             {element.props.children || 'Container'}
           </div>
         )
+      case 'link':
+        return (
+          <a
+            href={element.props.href || '#'}
+            target={element.props.target || '_self'}
+            style={baseStyle}
+            onClick={onSelect}
+          >
+            {element.props.text || 'Link'}
+          </a>
+        )
+      case 'list':
+        const ListTag = element.props.ordered ? 'ol' : 'ul'
+        const listItems = element.props.items?.split('\n') || []
+        return (
+          <ListTag style={baseStyle} onClick={onSelect}>
+            {listItems.map((item, i) => (
+              <li key={i}>{item.trim() || `Item ${i + 1}`}</li>
+            ))}
+          </ListTag>
+        )
+      case 'select':
+        const selectOptions = element.props.options?.split('\n') || []
+        return (
+          <select style={baseStyle} onClick={onSelect} disabled>
+            {element.props.placeholder && (
+              <option value="" disabled>{element.props.placeholder}</option>
+            )}
+            {selectOptions.map((opt, i) => (
+              <option key={i} value={opt.trim()}>{opt.trim() || `Option ${i + 1}`}</option>
+            ))}
+          </select>
+        )
+      case 'checkbox':
+        return (
+          <label style={baseStyle} onClick={onSelect}>
+            <input type="checkbox" checked={element.props.checked || false} readOnly />
+            <span style={{ marginLeft: '0.5rem' }}>{element.props.label || 'Checkbox'}</span>
+          </label>
+        )
+      case 'radio':
+        return (
+          <label style={baseStyle} onClick={onSelect}>
+            <input type="radio" name={element.props.name || 'radio-group'} checked={element.props.checked || false} readOnly />
+            <span style={{ marginLeft: '0.5rem' }}>{element.props.label || 'Radio'}</span>
+          </label>
+        )
+      case 'label':
+        return (
+          <label htmlFor={element.props.for || ''} style={baseStyle} onClick={onSelect}>
+            {element.props.text || 'Label'}
+          </label>
+        )
+      case 'span':
+        return (
+          <span style={baseStyle} onClick={onSelect}>
+            {element.props.text || 'Span text'}
+          </span>
+        )
+      case 'table':
+        const rows = element.props.rows || 3
+        const cols = element.props.cols || 3
+        const hasHeader = element.props.header !== false
+        return (
+          <table style={baseStyle} onClick={onSelect}>
+            {hasHeader && (
+              <thead>
+                <tr>
+                  {Array.from({ length: cols }).map((_, i) => (
+                    <th key={i} style={{ border: '1px solid #ddd', padding: '0.5rem' }}>
+                      Header {i + 1}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+            )}
+            <tbody>
+              {Array.from({ length: rows }).map((_, r) => (
+                <tr key={r}>
+                  {Array.from({ length: cols }).map((_, c) => (
+                    <td key={c} style={{ border: '1px solid #ddd', padding: '0.5rem' }}>
+                      Cell {r + 1}-{c + 1}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )
+      case 'video':
+        return (
+          <video
+            src={element.props.src || ''}
+            controls={element.props.controls !== false}
+            style={baseStyle}
+            onClick={onSelect}
+          >
+            Your browser does not support the video tag.
+          </video>
+        )
+      case 'iframe':
+        return (
+          <iframe
+            src={element.props.src || 'https://www.example.com'}
+            width={element.props.width || '600'}
+            height={element.props.height || '400'}
+            style={baseStyle}
+            title="Embedded content"
+            onClick={onSelect}
+          />
+        )
+      case 'form':
+        return (
+          <form
+            action={element.props.action || '#'}
+            method={element.props.method || 'post'}
+            style={baseStyle}
+            onClick={onSelect}
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <p style={{ margin: 0, color: '#666' }}>Form container - Add inputs here</p>
+          </form>
+        )
       default:
-        return <div style={baseStyle} onClick={onSelect}>Unknown Element</div>
+        return <div style={baseStyle} onClick={onSelect}>Unknown Element: {element.type}</div>
     }
   }
 
   return (
     <div
-      ref={drag}
-      className={`canvas-element ${isSelected ? 'selected' : ''} ${isHovered ? 'hovered' : ''}`}
+      ref={!isLocked ? drag : null}
+      className={`canvas-element ${isSelected ? 'selected' : ''} ${isHovered ? 'hovered' : ''} ${isLocked ? 'locked' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{ 
@@ -181,7 +307,7 @@ const CanvasElement = ({ element, isSelected, onSelect, onDelete, onUpdate }) =>
         position: 'absolute',
         left: `${element.position.x}px`,
         top: `${element.position.y}px`,
-        zIndex: isSelected ? 1000 : isDragging ? 1001 : 1
+        zIndex: element.zIndex || (isSelected ? 1000 : isDragging ? 1001 : 1)
       }}
     >
       <div 
@@ -202,13 +328,32 @@ const CanvasElement = ({ element, isSelected, onSelect, onDelete, onUpdate }) =>
           <>
             <Resizer
               element={element}
-              onResize={(newStyle) => {
-                onUpdate({ style: newStyle })
+              disabled={isLocked}
+              onResize={(updates) => {
+                // Handle both style and position updates from resizer
+                if (updates.style && updates.position) {
+                  onUpdate({ 
+                    style: updates.style, 
+                    position: updates.position 
+                  })
+                } else if (updates.style) {
+                  onUpdate({ style: updates.style })
+                }
               }}
               minWidth={element.type === 'image' ? 50 : element.type === 'divider' ? 50 : 30}
               minHeight={element.type === 'image' ? 50 : element.type === 'divider' ? 1 : 20}
             />
             <div className="element-controls">
+              <button
+                className={`control-btn lock-btn ${isLocked ? 'locked' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onToggleLock()
+                }}
+                title={isLocked ? 'Unlock' : 'Lock'}
+              >
+                {isLocked ? '🔒' : '🔓'}
+              </button>
               <button
                 className="control-btn delete-btn"
                 onClick={(e) => {
@@ -226,6 +371,7 @@ const CanvasElement = ({ element, isSelected, onSelect, onDelete, onUpdate }) =>
       {isHovered && !isSelected && (
         <div className="element-overlay">
           <span className="element-type">{element.type}</span>
+          {isLocked && <span className="lock-indicator">🔒</span>}
         </div>
       )}
     </div>

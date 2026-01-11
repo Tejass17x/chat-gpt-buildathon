@@ -3,7 +3,7 @@ import { useDrop } from 'react-dnd'
 import CanvasElement from './CanvasElement'
 import './Canvas.css'
 
-const Canvas = ({ elements, onDrop, onSelectElement, selectedElement, onDeleteElement, onUpdateElement }) => {
+const Canvas = ({ elements, onDrop, onSelectElement, selectedElement, onDeleteElement, onUpdateElement, onToggleLock }) => {
   const canvasRef = useRef(null)
   const [dropPosition, setDropPosition] = useState(null)
   const [showGrid, setShowGrid] = useState(true)
@@ -32,10 +32,44 @@ const Canvas = ({ elements, onDrop, onSelectElement, selectedElement, onDeleteEl
       
       // If moving existing element
       if (item.type === 'move' && item.id) {
-        onUpdateElement(item.id, { position })
+        // Don't allow moving locked elements
+        const elementToMove = elements.find(el => el.id === item.id)
+        if (elementToMove && elementToMove.locked) {
+          return // Prevent moving locked element
+        }
+        
+        // Check if moving onto locked elements
+        const overlappingLockedElements = elements.filter(el => {
+          if (!el.locked || el.id === item.id) return false
+          // Check if position overlaps with locked element (threshold for overlap detection)
+          const threshold = 100 // pixels
+          const distanceX = Math.abs(el.position.x - position.x)
+          const distanceY = Math.abs(el.position.y - position.y)
+          return distanceX < threshold && distanceY < threshold
+        })
+        
+        // If moving onto locked elements, adjust z-index
+        if (overlappingLockedElements.length > 0) {
+          // Put locked elements to back
+          overlappingLockedElements.forEach(lockedEl => {
+            onUpdateElement(lockedEl.id, { zIndex: 1 })
+          })
+          // Move current element to front
+          const maxZIndex = Math.max(...elements.map(el => el.zIndex || 1))
+          onUpdateElement(item.id, { position, zIndex: maxZIndex + 1 })
+        } else {
+          // Normal move - just update position
+          onUpdateElement(item.id, { position })
+        }
+        
         // Update selected element if it's the one being moved
         if (selectedElement?.id === item.id) {
-          onSelectElement({ ...selectedElement, position })
+          const updatedElement = { ...selectedElement, position }
+          if (overlappingLockedElements.length > 0) {
+            const maxZIndex = Math.max(...elements.map(el => el.zIndex || 1))
+            updatedElement.zIndex = maxZIndex + 1
+          }
+          onSelectElement(updatedElement)
         }
       } else {
         // New element from sidebar
@@ -103,19 +137,25 @@ const Canvas = ({ elements, onDrop, onSelectElement, selectedElement, onDeleteEl
             <p>Drag elements from the sidebar to start building</p>
           </div>
         )}
-        {elements.map((element) => (
-          <CanvasElement
-            key={element.id}
-            element={element}
-            isSelected={selectedElement?.id === element.id}
-            onSelect={() => onSelectElement(element)}
-            onDelete={() => onDeleteElement(element.id)}
-            onUpdate={(updates) => {
-              const updated = { ...element, ...updates }
-              onSelectElement(updated)
-            }}
-          />
-        ))}
+        {elements
+          .sort((a, b) => (a.zIndex || 1) - (b.zIndex || 1))
+          .map((element) => (
+            <CanvasElement
+              key={element.id}
+              element={element}
+              isSelected={selectedElement?.id === element.id}
+              onSelect={() => onSelectElement(element)}
+              onDelete={() => onDeleteElement(element.id)}
+              onToggleLock={() => onToggleLock(element.id)}
+              onUpdate={(updates) => {
+                // Update the element in the elements array
+                onUpdateElement(element.id, updates)
+                // Also update the selected element state
+                const updated = { ...element, ...updates }
+                onSelectElement(updated)
+              }}
+            />
+          ))}
       </div>
     </div>
   )

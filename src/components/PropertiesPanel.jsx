@@ -178,6 +178,295 @@ const PropertiesPanel = ({ element, onUpdate }) => {
       )
     }
 
+    if (element.type === 'link') {
+      inputs.push(
+        <>
+          <div key="text" className="property-group">
+            <label>Link Text</label>
+            <input
+              type="text"
+              value={localProps.text || ''}
+              onChange={(e) => handlePropChange('text', e.target.value)}
+            />
+          </div>
+          <div key="href" className="property-group">
+            <label>URL</label>
+            <input
+              type="url"
+              value={localProps.href || ''}
+              onChange={(e) => handlePropChange('href', e.target.value)}
+              placeholder="https://example.com"
+            />
+          </div>
+          <div key="target" className="property-group">
+            <label>Target</label>
+            <select
+              value={localProps.target || '_self'}
+              onChange={(e) => handlePropChange('target', e.target.value)}
+            >
+              <option value="_self">Same Window</option>
+              <option value="_blank">New Window</option>
+            </select>
+          </div>
+        </>
+      )
+    }
+
+    if (element.type === 'list') {
+      inputs.push(
+        <>
+          <div key="items" className="property-group">
+            <label>Items (one per line)</label>
+            <textarea
+              value={localProps.items || ''}
+              onChange={(e) => handlePropChange('items', e.target.value)}
+              rows={4}
+              placeholder="Item 1&#10;Item 2&#10;Item 3"
+            />
+          </div>
+          <div key="ordered" className="property-group">
+            <label>
+              <input
+                type="checkbox"
+                checked={localProps.ordered || false}
+                onChange={(e) => handlePropChange('ordered', e.target.checked)}
+              />
+              Ordered List
+            </label>
+          </div>
+        </>
+      )
+    }
+
+    if (element.type === 'select') {
+      inputs.push(
+        <>
+          <div key="placeholder" className="property-group">
+            <label>Placeholder</label>
+            <input
+              type="text"
+              value={localProps.placeholder || ''}
+              onChange={(e) => handlePropChange('placeholder', e.target.value)}
+            />
+          </div>
+          <div key="options" className="property-group">
+            <label>Options (one per line)</label>
+            <textarea
+              value={localProps.options || ''}
+              onChange={(e) => handlePropChange('options', e.target.value)}
+              rows={4}
+              placeholder="Option 1&#10;Option 2&#10;Option 3"
+            />
+          </div>
+        </>
+      )
+    }
+
+    if (element.type === 'checkbox' || element.type === 'radio') {
+      inputs.push(
+        <>
+          <div key="label" className="property-group">
+            <label>Label Text</label>
+            <input
+              type="text"
+              value={localProps.label || ''}
+              onChange={(e) => handlePropChange('label', e.target.value)}
+            />
+          </div>
+          <div key="checked" className="property-group">
+            <label>
+              <input
+                type="checkbox"
+                checked={localProps.checked || false}
+                onChange={(e) => handlePropChange('checked', e.target.checked)}
+              />
+              Checked
+            </label>
+          </div>
+          {element.type === 'radio' && (
+            <div key="name" className="property-group">
+              <label>Group Name</label>
+              <input
+                type="text"
+                value={localProps.name || ''}
+                onChange={(e) => handlePropChange('name', e.target.value)}
+                placeholder="radio-group"
+              />
+            </div>
+          )}
+        </>
+      )
+    }
+
+    if (element.type === 'label') {
+      inputs.push(
+        <>
+          <div key="text" className="property-group">
+            <label>Label Text</label>
+            <input
+              type="text"
+              value={localProps.text || ''}
+              onChange={(e) => handlePropChange('text', e.target.value)}
+            />
+          </div>
+          <div key="for" className="property-group">
+            <label>For (Element ID)</label>
+            <input
+              type="text"
+              value={localProps.for || ''}
+              onChange={(e) => handlePropChange('for', e.target.value)}
+              placeholder="element-id"
+            />
+          </div>
+        </>
+      )
+    }
+
+    if (element.type === 'span') {
+      inputs.push(
+        <div key="text" className="property-group">
+          <label>Text</label>
+          <input
+            type="text"
+            value={localProps.text || ''}
+            onChange={(e) => handlePropChange('text', e.target.value)}
+          />
+        </div>
+      )
+    }
+
+    if (element.type === 'table') {
+      inputs.push(
+        <>
+          <div key="rows" className="property-group">
+            <label>Rows</label>
+            <input
+              type="number"
+              min="1"
+              value={localProps.rows || 3}
+              onChange={(e) => handlePropChange('rows', parseInt(e.target.value) || 1)}
+            />
+          </div>
+          <div key="cols" className="property-group">
+            <label>Columns</label>
+            <input
+              type="number"
+              min="1"
+              value={localProps.cols || 3}
+              onChange={(e) => handlePropChange('cols', parseInt(e.target.value) || 1)}
+            />
+          </div>
+          <div key="header" className="property-group">
+            <label>
+              <input
+                type="checkbox"
+                checked={localProps.header !== false}
+                onChange={(e) => handlePropChange('header', e.target.checked)}
+              />
+              Show Header Row
+            </label>
+          </div>
+        </>
+      )
+    }
+
+    if (element.type === 'video') {
+      inputs.push(
+        <>
+          <div key="src" className="property-group">
+            <label>Video URL</label>
+            <input
+              type="url"
+              value={localProps.src || ''}
+              onChange={(e) => handlePropChange('src', e.target.value)}
+              placeholder="https://example.com/video.mp4"
+            />
+          </div>
+          <div key="controls" className="property-group">
+            <label>
+              <input
+                type="checkbox"
+                checked={localProps.controls !== false}
+                onChange={(e) => handlePropChange('controls', e.target.checked)}
+              />
+              Show Controls
+            </label>
+          </div>
+        </>
+      )
+    }
+
+    if (element.type === 'iframe') {
+      inputs.push(
+        <>
+          <div key="src" className="property-group">
+            <label>URL</label>
+            <input
+              type="url"
+              value={localProps.src || ''}
+              onChange={(e) => handlePropChange('src', e.target.value)}
+              placeholder="https://www.example.com"
+            />
+          </div>
+          <div key="width" className="property-group">
+            <label>Width</label>
+            <input
+              type="text"
+              value={localProps.width || '600'}
+              onChange={(e) => handlePropChange('width', e.target.value)}
+            />
+          </div>
+          <div key="height" className="property-group">
+            <label>Height</label>
+            <input
+              type="text"
+              value={localProps.height || '400'}
+              onChange={(e) => handlePropChange('height', e.target.value)}
+            />
+          </div>
+        </>
+      )
+    }
+
+    if (element.type === 'form') {
+      inputs.push(
+        <>
+          <div key="action" className="property-group">
+            <label>Action URL</label>
+            <input
+              type="text"
+              value={localProps.action || '#'}
+              onChange={(e) => handlePropChange('action', e.target.value)}
+            />
+          </div>
+          <div key="method" className="property-group">
+            <label>Method</label>
+            <select
+              value={localProps.method || 'post'}
+              onChange={(e) => handlePropChange('method', e.target.value)}
+            >
+              <option value="get">GET</option>
+              <option value="post">POST</option>
+            </select>
+          </div>
+        </>
+      )
+    }
+
+    if (element.type === 'container') {
+      inputs.push(
+        <div key="children" className="property-group">
+          <label>Content</label>
+          <textarea
+            value={localProps.children || ''}
+            onChange={(e) => handlePropChange('children', e.target.value)}
+            rows={3}
+            placeholder="Container content"
+          />
+        </div>
+      )
+    }
+
     return inputs
   }
 
